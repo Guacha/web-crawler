@@ -27,7 +27,13 @@ public class Araña {
         pourVisiter = new LinkedList<>();
     }
     
-    String prochainWeb() {
+    /**
+     *Función que se encarga de obtener la siguiente dirección web válida que 
+     * aún no se ha visitado
+     * 
+     * @return
+     */
+    public String prochainWeb() {
         String url;
         
         do {
