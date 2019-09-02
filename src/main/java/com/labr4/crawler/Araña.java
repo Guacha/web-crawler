@@ -31,7 +31,8 @@ public class Araña {
      *Función que se encarga de obtener la siguiente dirección web válida que 
      * aún no se ha visitado
      * 
-     * @return
+     * @return La siguiente Dirección web (String) válida que no se haya 
+     * explorado
      */
     public String prochainWeb() {
         String url;
