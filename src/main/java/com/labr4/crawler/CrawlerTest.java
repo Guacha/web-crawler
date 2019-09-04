@@ -30,8 +30,6 @@ public class CrawlerTest {
             url = null;
         }
         a.creerWebURL(url);
-        System.out.println("");
-        a.creerWeb(s);
     }
     
 }

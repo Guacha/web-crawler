@@ -66,12 +66,15 @@ public class Webber {
 
     }
     
+    /**
+     *
+     * @param url 
+     * La URL que se utiliza para hacer el Query HTML
+     */
     public void tricot(URL url) {
         try {
             int cont = 0;
-            BufferedReader bf = new BufferedReader(new InputStreamReader(url.openStream()));
-            File html = new File("html.txt");
-            BufferedWriter bw = new BufferedWriter(new FileWriter(html));
+            BufferedReader bf = new BufferedReader(new InputStreamReader(url.openStream()));            
             String line;
             String link = "";
             while((line = bf.readLine()) != null) {
@@ -90,17 +93,11 @@ public class Webber {
                             } else {
                                 link = "http://".concat(link.substring(2));
                             }
-
                         }
                         links.add(link);
-                    }
-                    
-                    bw.write(link + "\n");
-                }
-                
-                
+                    }   
+                }   
             }
-            bw.close();
             bf.close();
             System.out.println("Se encontraron " + cont + " enlaces válidos");
         } catch (IOException ex) {
