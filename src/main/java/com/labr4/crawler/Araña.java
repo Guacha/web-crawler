@@ -5,6 +5,7 @@
  */
 package com.labr4.crawler;
 
+import java.net.URL;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -21,7 +22,7 @@ public class Araña {
     private Set<String> dejaRegarde;
     
     private Queue<String> pourVisiter;
-
+    
     public Araña() {
         dejaRegarde = new HashSet<>();
         pourVisiter = new LinkedList<>();
@@ -54,7 +55,7 @@ public class Araña {
      */
     public void creerWeb(String url) {
         
-        while(this.dejaRegarde.size() < Limite){
+        //while(this.dejaRegarde.size() < Limite){
             Webber w = new Webber();
             String urlActuelle;
             if (pourVisiter.isEmpty()) {
@@ -64,11 +65,16 @@ public class Araña {
             }
             w.tricot(urlActuelle);
             pourVisiter.addAll(w.getLinks());
-        }
+        //}
         
         System.out.println("Limite del Crawl alcanzado, total de paginas encontradas: " + (pourVisiter.size() + dejaRegarde.size()));
         
         
+    }
+    
+    public void creerWebURL(URL url) {
+        Webber w = new Webber();
+        w.tricot(url);
     }
     
     

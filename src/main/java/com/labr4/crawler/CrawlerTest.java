@@ -5,6 +5,10 @@
  */
 package com.labr4.crawler;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,8 +22,16 @@ public class CrawlerTest {
      */
     public static void main(String[] args) {
         Araña a = new Araña();
-        
-        a.creerWeb(JOptionPane.showInputDialog(null, "Ingrese el enlace a revisar", "WebCrawler", -1));
+        URL url;
+        String s = JOptionPane.showInputDialog(null, "Ingrese el enlace a revisar", "WebCrawler", -1); //Pedir la URL
+        try {
+            url = new URL(s); //Convertir la string de pagina a URL
+        } catch (MalformedURLException ex) {
+            url = null;
+        }
+        a.creerWebURL(url);
+        System.out.println("");
+        a.creerWeb(s);
     }
     
 }
