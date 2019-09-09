@@ -7,8 +7,6 @@ package com.labr4.crawler;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -29,7 +27,11 @@ public class CrawlerTest {
         } catch (MalformedURLException ex) {
             url = null;
         }
+        System.out.println("Paginas encontradas por metodo manual");
         a.creerWebURL(url);
+//        System.out.println("");
+//        a = new Araña();
+//        a.creerWeb(s);
     }
     
 }

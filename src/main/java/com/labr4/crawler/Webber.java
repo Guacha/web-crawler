@@ -6,16 +6,12 @@
 package com.labr4.crawler;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -31,11 +27,14 @@ public class Webber {
             = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
     private List<String> links = new LinkedList<>();
     private Document htmlDoc;
+    private int failCont = 0;
 
     /**
      * Se encarga de revisar el documento HTML de una pagina especifica, leerlo
      * y hacerle un parse legible para java.
-     *
+     * <br>
+     * Esta librería requiere Jsoup y por tanto no es válida, es solo para pruebas
+     * <br>
      * De esto, se obtienen los elementos enlace de la pagina y se agregan a la
      * lista links
      *
@@ -51,13 +50,14 @@ public class Webber {
             Document htmlObtenue = connection.get();
             htmlDoc = htmlObtenue;
             if (connection.response().statusCode() == 200) {
-                System.out.println("Visitando pagina " + url);
+                
                 Elements linksDansPage = htmlDoc.select("a[href]");
-                System.out.println("    Se encontraron " + linksDansPage.size() + " enlaces web en "
-                        + url + ":");
+                
                 linksDansPage.forEach((element) -> {
                     System.out.println(element.absUrl("href"));
+                    
                     links.add(element.absUrl("href"));
+                    
                 });
             }
         } catch (IOException ex) {
@@ -73,19 +73,19 @@ public class Webber {
      */
     public void tricot(URL url) {
         try {
-            int cont = 0;
-            BufferedReader bf = new BufferedReader(new InputStreamReader(url.openStream()));            
+            URLConnection connection = url.openConnection();
+            connection.setRequestProperty("User-Agent", USER_AGENT);
+            connection.connect();
+            BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream()));        
+            
             String line;
             String link = "";
             while((line = bf.readLine()) != null) {
                 if (line.contains("href=\"") && line.contains("a ")) {
                     link = line.substring(line.indexOf("href=\"")).substring(6);
-                    
                     String possible[] = link.split("href=\"");
-                    
                     for (String string : possible) {
                         link = string.substring(0, string.indexOf("\""));
-                        cont++;
                         if (!link.contains("http")) {
 
                             if (!link.contains("//")) {
@@ -94,17 +94,27 @@ public class Webber {
                                 link = "http://".concat(link.substring(2));
                             }
                         }
-                        links.add(link);
+                        URL trouve = new URL(link);
+                        
+                        if (trouve.getHost().equals(url.getHost())) {
+                            if (trouve != url && !links.contains(link)) {
+                                
+                                links.add(link);
+                            }
+                            
+                            
+                        }
+                        
                     }   
                 }   
             }
             bf.close();
-            System.out.println("Se encontraron " + cont + " enlaces válidos");
+            
         } catch (IOException ex) {
-            Logger.getLogger(Webber.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
+            System.out.println(ex);
+            System.out.println(ex.getMessage());
+            failCont++;
+        }     
     }
 
     /**
@@ -115,5 +125,8 @@ public class Webber {
     public List<String> getLinks() {
         return this.links;
     }
-
+    
+    public int getFails() {
+        return failCont;
+    }
 }
