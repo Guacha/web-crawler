@@ -21,7 +21,7 @@ public class CrawlerTest {
     public static void main(String[] args) {
         Araña a = new Araña();
         URL url;
-        String s = JOptionPane.showInputDialog(null, "Ingrese el enlace a revisar", "WebCrawler", -1); //Pedir la URL
+        String s = JOptionPane.showInputDialog(null, "Ingrese el enlace a revisar", "WebCrawler", -1).concat("/"); //Pedir la URL
         try {
             url = new URL(s); //Convertir la string de pagina a URL
         } catch (MalformedURLException ex) {

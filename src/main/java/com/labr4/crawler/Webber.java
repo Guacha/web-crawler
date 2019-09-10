@@ -25,46 +25,10 @@ public class Webber {
 
     private static final String USER_AGENT //Tipo de explorador que se usa
             = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
-    private List<String> links = new LinkedList<>();
+    private List<URL> links = new LinkedList<>();
     private Document htmlDoc;
     private int failCont = 0;
-
-    /**
-     * Se encarga de revisar el documento HTML de una pagina especifica, leerlo
-     * y hacerle un parse legible para java.
-     * <br>
-     * Esta librería requiere Jsoup y por tanto no es válida, es solo para pruebas
-     * <br>
-     * De esto, se obtienen los elementos enlace de la pagina y se agregan a la
-     * lista links
-     *
-     * @param url Url para realizar el Query HTML
-     *
-     * @exception IOException Excepción que ocurre si el URL ingresado es
-     * inválido
-     */
-    public void tricot(String url) {
-
-        try {
-            Connection connection = Jsoup.connect(url).userAgent(USER_AGENT);
-            Document htmlObtenue = connection.get();
-            htmlDoc = htmlObtenue;
-            if (connection.response().statusCode() == 200) {
-                
-                Elements linksDansPage = htmlDoc.select("a[href]");
-                
-                linksDansPage.forEach((element) -> {
-                    System.out.println(element.absUrl("href"));
-                    
-                    links.add(element.absUrl("href"));
-                    
-                });
-            }
-        } catch (IOException ex) {
-            System.out.println("La dirección: " + url + " no es válida");
-        }
-
-    }
+    private final int maxLinks = 4;
     
     /**
      *
@@ -80,7 +44,8 @@ public class Webber {
             
             String line;
             String link = "";
-            while((line = bf.readLine()) != null) {
+            int cont = 0;
+            while((line = bf.readLine()) != null && cont <= maxLinks) {
                 if (line.contains("href=\"") && line.contains("a ")) {
                     link = line.substring(line.indexOf("href=\"")).substring(6);
                     String possible[] = link.split("href=\"");
@@ -89,22 +54,16 @@ public class Webber {
                         if (!link.contains("http")) {
 
                             if (!link.contains("//")) {
-                                link = "http://".concat(url.getHost()).concat(link);
+                                link = "https://".concat(url.getHost()).concat(link);
                             } else {
-                                link = "http://".concat(link.substring(2));
+                                link = "https://".concat(link.substring(2));
                             }
                         }
                         URL trouve = new URL(link);
                         
-                        if (trouve.getHost().equals(url.getHost())) {
-                            if (trouve != url && !links.contains(link)) {
-                                
-                                links.add(link);
-                            }
-                            
-                            
+                        if (trouve.getHost().equals(url.getHost()) && (!links.contains(trouve))) {
+                            links.add(trouve);                    
                         }
-                        
                     }   
                 }   
             }
@@ -116,15 +75,20 @@ public class Webber {
             failCont++;
         }     
     }
-
+                        
+                      
     /**
      * Obtiene la lista de elementos encontrados luego de un query HTML
      *
      * @return La lista de elementos de enlace encontrados
      */
-    public List<String> getLinks() {
+    public List<URL> getLinks() {
+        for (URL link : links) {
+            System.out.println(link);
+        }
         return this.links;
     }
+        
     
     public int getFails() {
         return failCont;

@@ -20,9 +20,9 @@ public class Araña {
     private static final int Limite = 10;
     
     
-    private Set<String> dejaRegarde;
+    private Set<URL> dejaRegarde;
     
-    private Queue<String> pourVisiter;
+    private Queue<URL> pourVisiter;
     
     public Araña() {
         dejaRegarde = new HashSet<>();
@@ -36,8 +36,8 @@ public class Araña {
      * @return La siguiente Dirección web (String) válida que no se haya 
      * explorado
      */
-    public String prochainWeb() {
-        String url;
+    public URL prochainWeb() {
+        URL url;
         
         do {
             url = this.pourVisiter.remove();
@@ -45,35 +45,7 @@ public class Araña {
         this.dejaRegarde.add(url);
         return url;
     }
-    
-    /**
-     *creerWeb se encarga de organizar las peticiones HTML de la clase Webber, y
-     * llevar cuenta de todas las páginas visitas y por visitar, así como el 
-     * límite de paginas que se pueden visitar 
-     * Requiere el uso de JSoup para funcionar correctamente
-     * 
-     * @param url
-     * Url inicial del Crawl, a partir de esta se seguirá explorando
-     */
-    public void creerWeb(String url) {
         
-        //while(this.dejaRegarde.size() < Limite){
-            Webber w = new Webber();
-            String urlActuelle;
-            if (pourVisiter.isEmpty()) {
-                urlActuelle = url;
-            } else {
-                urlActuelle = prochainWeb();
-            }
-            w.tricot(urlActuelle);
-            pourVisiter.addAll(w.getLinks());
-        //}
-        
-        System.out.println("Limite del Crawl alcanzado, total de paginas encontradas (Jsoup): " + (pourVisiter.size() + dejaRegarde.size()));
-        
-        
-    }
-    
     /**
      *creerWeb se encarga de organizar las peticiones HTML de la clase Webber, y
      * llevar cuenta de todas las páginas visitas y por visitar, así como el 
@@ -90,11 +62,7 @@ public class Araña {
             if (this.pourVisiter.isEmpty()) {
                 urlActuelle = url;
             } else {
-                try {
-                    urlActuelle = new URL(prochainWeb());
-                } catch (MalformedURLException ex) {
-                    urlActuelle = null;
-                }
+                urlActuelle = prochainWeb();
             }
             w.tricot(urlActuelle);
             cont =+ w.getFails();
