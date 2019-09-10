@@ -45,7 +45,8 @@ public class Webber {
             String line;
             String link = "";
             int cont = 0;
-            while((line = bf.readLine()) != null && cont <= maxLinks) {
+            while((line = bf.readLine()) != null) {
+                line = line.toLowerCase();
                 if (line.contains("href=\"") && line.contains("a ")) {
                     link = line.substring(line.indexOf("href=\"")).substring(6);
                     String possible[] = link.split("href=\"");
@@ -54,21 +55,25 @@ public class Webber {
                         if (!link.contains("http")) {
 
                             if (!link.contains("//")) {
-                                link = "https://".concat(url.getHost()).concat(link);
+                                String prefix = "https://".concat(url.getHost());                
+                                if (link.endsWith("/")) {
+                                    link = prefix.concat(link);
+                                } else {
+                                    link = prefix.concat("/").concat(link);
+                                }
                             } else {
                                 link = "https://".concat(link.substring(2));
                             }
                         }
                         URL trouve = new URL(link);
-                        
-                        if (trouve.getHost().equals(url.getHost()) && (!links.contains(trouve))) {
-                            links.add(trouve);                    
+                        if (trouve.getHost().equals(url.getHost()) && (!links.contains(trouve)) && cont++ <= maxLinks) {
+                            links.add(trouve);
                         }
-                    }   
+                    }
+                    
                 }   
             }
             bf.close();
-            
         } catch (IOException ex) {
             System.out.println(ex);
             System.out.println(ex.getMessage());
@@ -83,9 +88,6 @@ public class Webber {
      * @return La lista de elementos de enlace encontrados
      */
     public List<URL> getLinks() {
-        for (URL link : links) {
-            System.out.println(link);
-        }
         return this.links;
     }
         

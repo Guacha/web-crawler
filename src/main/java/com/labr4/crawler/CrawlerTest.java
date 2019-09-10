@@ -19,11 +19,12 @@ public class CrawlerTest {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        CrawlerTest c = new CrawlerTest();
         Araña a = new Araña();
         URL url;
         String s = JOptionPane.showInputDialog(null, "Ingrese el enlace a revisar", "WebCrawler", -1).concat("/"); //Pedir la URL
         try {
-            url = new URL(s); //Convertir la string de pagina a URL
+            url = new URL(c.obtenirURL(s)); //Convertir la string de pagina a URL
         } catch (MalformedURLException ex) {
             url = null;
         }
@@ -33,5 +34,18 @@ public class CrawlerTest {
 //        a = new Araña();
 //        a.creerWeb(s);
     }
+    
+    private String obtenirURL(String obtenue) {
+        String valide = obtenue;
+        if (valide.split("\\.").length < 2) {
+            valide = "www.".concat(valide);
+        }
+        
+        if (!obtenue.contains("http")) {
+            valide = "https://".concat(valide);
+        }
+        return valide;
+    }
+    
     
 }
