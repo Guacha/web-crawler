@@ -41,7 +41,7 @@ public class Webber {
             connection.setRequestProperty("User-Agent", USER_AGENT);
             connection.connect();
             BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream()));        
-            
+            //nepe
             String line;
             String link = "";
             int cont = 0;
