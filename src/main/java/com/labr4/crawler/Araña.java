@@ -17,7 +17,7 @@ import java.util.Set;
  * @author Guacha
  */
 public class Araña {
-    private static final int Limite = 10;
+    private static final int Limite = 5;
     
     
     private Set<URL> dejaRegarde;
@@ -41,7 +41,7 @@ public class Araña {
         
         do {
             url = this.pourVisiter.remove();
-        } while (this.dejaRegarde.contains(url));
+        } while (this.dejaRegarde.contains(url) && !this.pourVisiter.isEmpty());
         this.dejaRegarde.add(url);
         return url;
     }
@@ -55,23 +55,40 @@ public class Araña {
      * URL inicial del crawl, a partir de la cual se seguirá explorando
      */
     public void creerWebURL(URL url) {
+        pourVisiter.add(url);
         int cont = 0;
         URL urlActuelle;
-        //while(this.dejaRegarde.size() < Limite) {
+        while(this.dejaRegarde.size() < Limite && !this.pourVisiter.isEmpty()) {
             Webber w = new Webber();
-            if (this.pourVisiter.isEmpty()) {
-                urlActuelle = url;
-            } else {
-                urlActuelle = prochainWeb();
-            }
+            urlActuelle = analyserURL(prochainWeb());
             w.tricot(urlActuelle);
             cont =+ w.getFails();
-            pourVisiter.addAll(w.getLinks());
-        //}
+            
+            if (!w.getLinks().isEmpty()) {
+                for (URL urls : w.getLinks()) {
+                if (!dejaRegarde.contains(urls)) {
+                    System.out.println("\t" + urls);
+                    pourVisiter.add(urls);
+                    
+                    }
+                }
+            }
+        }
         System.out.println("Limite del Crawl alcanzado, total de paginas encontradas: " + (pourVisiter.size() + dejaRegarde.size()));
         System.out.println("Hubo un total de " + cont + " errores de query HTML");
-        
     }
     
-    
+    private URL analyserURL(URL url) {
+        String urlTxt = url.toString();
+        
+        if (!urlTxt.contains("https")) {
+            urlTxt = urlTxt.replace("http://", "https://");
+        }
+        
+        try {
+            return new URL(urlTxt);
+        } catch (MalformedURLException ex) {
+            return null;
+        }
+    }
 }

@@ -22,7 +22,7 @@ public class CrawlerTest {
         CrawlerTest c = new CrawlerTest();
         Araña a = new Araña();
         URL url;
-        String s = JOptionPane.showInputDialog(null, "Ingrese el enlace a revisar", "WebCrawler", -1).concat("/"); //Pedir la URL
+        String s = JOptionPane.showInputDialog(null, "Ingrese el enlace a revisar", "WebCrawler", -1); //Pedir la URL
         try {
             url = new URL(c.obtenirURL(s)); //Convertir la string de pagina a URL
         } catch (MalformedURLException ex) {
@@ -30,20 +30,22 @@ public class CrawlerTest {
         }
         System.out.println("Paginas encontradas por metodo manual");
         a.creerWebURL(url);
-//        System.out.println("");
-//        a = new Araña();
-//        a.creerWeb(s);
     }
     
     private String obtenirURL(String obtenue) {
         String valide = obtenue;
-        if (valide.split("\\.").length < 2) {
+             
+        if (!valide.contains("http")) {
+            if (valide.split("\\.").length <= 2) {
             valide = "www.".concat(valide);
-        }
-        
-        if (!obtenue.contains("http")) {
+            }
             valide = "https://".concat(valide);
         }
+        
+        if (!valide.endsWith("/")) {
+            valide = valide.concat("/");
+        }
+        
         return valide;
     }
     
