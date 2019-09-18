@@ -17,7 +17,7 @@ import java.util.Set;
  * @author Guacha
  */
 public class Araña {
-    private static final int Limite = 5;
+    private static final int Limite = 20;
     
     
     private Set<URL> dejaRegarde;
@@ -65,13 +65,12 @@ public class Araña {
             cont =+ w.getFails();
             
             if (!w.getLinks().isEmpty()) {
-                for (URL urls : w.getLinks()) {
-                if (!dejaRegarde.contains(urls)) {
-                    System.out.println("\t" + urls);
+                w.getLinks().stream().filter((urls) -> (!dejaRegarde.contains(urls) && !pourVisiter.contains(urls))).map((urls) -> {
+                    //System.out.println("\t" + urls);
+                    return urls;
+                }).forEachOrdered((urls) -> {
                     pourVisiter.add(urls);
-                    
-                    }
-                }
+                });
             }
         }
         System.out.println("Limite del Crawl alcanzado, total de paginas encontradas: " + (pourVisiter.size() + dejaRegarde.size()));
