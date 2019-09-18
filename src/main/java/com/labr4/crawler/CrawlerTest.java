@@ -21,25 +21,21 @@ public class CrawlerTest {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        try {
+        
             CrawlerTest c = new CrawlerTest();
             Araña a = new Araña();
             URL url;
-            //String s = JOptionPane.showInputDialog(null, "Ingrese el enlace a revisar", "WebCrawler", -1); //Pedir la URL
+            String s = JOptionPane.showInputDialog(null, "Ingrese el enlace a revisar", "WebCrawler", -1); //Pedir la URL
             
-            Arbre t = new Arbre(new URL("https://wikipedia.org"));
-            System.out.println(t.trouverNode(new URL("https://nepe4.org"), t.root).getUrl());
             
-//        try {
-//            url = new URL(c.obtenirURL(s)); //Convertir la string de pagina a URL
-//        } catch (MalformedURLException ex) {
-//            url = null;
-//        }
-//        System.out.println("Paginas encontradas por metodo manual");
-//        a.creerWebURL(url);
+            
+        try {
+            url = new URL(c.obtenirURL(s)); //Convertir la string de pagina a URL
         } catch (MalformedURLException ex) {
-            Logger.getLogger(CrawlerTest.class.getName()).log(Level.SEVERE, null, ex);
+            url = null;
         }
+        System.out.println("Paginas encontradas por metodo manual");
+        a.creerWebURL(url);
     }
     
     private String obtenirURL(String obtenue) {
@@ -50,12 +46,7 @@ public class CrawlerTest {
             valide = "www.".concat(valide);
             }
             valide = "https://".concat(valide);
-        }
-        
-        if (!valide.endsWith("/")) {
-            valide = valide.concat("/");
-        }
-        
+        }        
         return valide;
     }
     

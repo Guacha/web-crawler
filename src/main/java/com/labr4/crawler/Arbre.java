@@ -6,6 +6,7 @@
 package com.labr4.crawler;
 
 import java.net.URL;
+import java.util.Iterator;
 
 /**
  *
@@ -18,12 +19,6 @@ public class Arbre {
         root = new Node(url);
     }
     
-    
-    
-    public void throwNodo(URL pere, URL add) {
-        
-    }
-    
     public Node trouverNode(URL url, Node n) {
         if (n ==  null) {
             return null;
@@ -34,12 +29,26 @@ public class Arbre {
             Node trouve = null;
             for (Node hijo : n.hijos) {
                 trouve = trouverNode(url, hijo);
+                if (trouve != null) return trouve;
             }
-            if (trouve != null) {
-                return trouve;
-            } else {
-                return null;
-            }
+            return null;
+            
         }       
+    }
+    
+    public void preOrder(Node n, int cont) {
+        if (n != null) {
+            System.out.println(n.getUrl() + " ");
+            for (Node hijo : n.hijos) {
+                for (int i = 0; i < cont; i++) {
+                    System.out.print("\t");
+                }
+                preOrder(hijo, cont++);
+            }
+        }
+    }
+
+    void preOrder() {
+        preOrder(root, 0);
     }
 }

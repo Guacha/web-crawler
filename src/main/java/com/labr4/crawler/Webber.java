@@ -36,11 +36,10 @@ public class Webber {
             connection.setRequestProperty("User-Agent", USER_AGENT);
             connection.connect();
             BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream()));        
-            System.out.println("Links encontrados en " + url + ": ");
             String line;
             String link = "";
             int cont = 0;
-            while((line = bf.readLine()) != null) {
+            while((line = bf.readLine()) != null && cont < maxLinks) {
                 line = line.toLowerCase();
                 if (line.contains("href=\"") && line.contains("a ")) {
                     link = line.substring(line.indexOf("href=\"")).substring(6);
@@ -69,7 +68,11 @@ public class Webber {
                             if (link.endsWith("/")) {
                                 link = link.substring(0,link.length()-1);
                             }
+                        } else {
+                            link = link.replace("http://", "https://");
                         }
+                        
+                        
                         URL trouve = new URL(link);
                         if (cont < maxLinks) {
                             if (!links.contains(trouve) && !trouve.equals(url)) {
@@ -84,7 +87,6 @@ public class Webber {
             }
             bf.close();
         } catch (IOException ex) {
-            System.out.println("Fail: " + url);
             failCont++;
         }     
     }

@@ -17,7 +17,7 @@ import java.util.Set;
  * @author Guacha
  */
 public class Araña {
-    private static final int Limite = 20;
+    private static final int Limite = 2;
     
     
     private Set<URL> dejaRegarde;
@@ -77,6 +77,9 @@ public class Araña {
         }
         System.out.println("Limite del Crawl alcanzado, total de paginas encontradas: " + (pourVisiter.size() + dejaRegarde.size()));
         System.out.println("Hubo un total de " + cont + " errores de query HTML");
+        
+        System.out.println("Arbol en preorden: ");
+        a.preOrder();
     }
     
     private URL analyserURL(URL url) {
