@@ -58,17 +58,19 @@ public class Araña {
         pourVisiter.add(url);
         int cont = 0;
         URL urlActuelle;
+        Arbre a = new Arbre(url);
         while(this.dejaRegarde.size() < Limite && !this.pourVisiter.isEmpty()) {
             Webber w = new Webber();
             urlActuelle = analyserURL(prochainWeb());
             w.tricot(urlActuelle);
+            Node enTravailleant = a.trouverNode(urlActuelle, a.root);
             cont =+ w.getFails();
             
             if (!w.getLinks().isEmpty()) {
                 w.getLinks().stream().filter((urls) -> (!dejaRegarde.contains(urls) && !pourVisiter.contains(urls))).map((urls) -> {
-                    //System.out.println("\t" + urls);
                     return urls;
-                }).forEachOrdered((urls) -> {
+                }).forEachOrdered((URL urls) -> {
+                    enTravailleant.hijos.add(new Node(urls));
                     pourVisiter.add(urls);
                 });
             }
